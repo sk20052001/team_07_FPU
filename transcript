@@ -1,0 +1,40 @@
+# //  Questa Sim-64
+# //  Version 10.6b linux_x86_64 May 25 2017
+# //
+# //  Copyright 1991-2017 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# do run.do
+# QuestaSim-64 vlog 10.6b Compiler 2017.05 May 25 2017
+# Start time: 18:53:26 on Apr 20,2025
+# vlog -reportprogress 300 -lint -sv fpu_params.sv fpu_sp_add.sv fpu_sp_sub.sv tb_top.sv 
+# -- Compiling module fpu_sp_add
+# -- Compiling module fpu_sp_sub
+# -- Compiling module tb_top
+# 
+# Top level modules:
+# 	tb_top
+# End time: 18:53:27 on Apr 20,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim -voptargs="+acc" work.tb_top 
+# Start time: 18:53:27 on Apr 20,2025
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-143) Recognized 1 FSM in module "fpu_sp_add(fast)".
+# Loading sv_std.std
+# Loading work.tb_top(fast)
+# Loading work.fpu_sp_sub(fast)
+# Loading work.fpu_sp_add(fast)
+# 31000	4.000000 - 3.000000 = 1.000000
+# 61000	5.500000 - 3.000000 = 2.500000
+# ** Note: $finish    : tb_top.sv(38)
+#    Time: 810 ns  Iteration: 0  Instance: /tb_top
+# 1
+# Break in Module tb_top at tb_top.sv line 38
