@@ -1,4 +1,4 @@
-module fpu_mul_RTL(
+module fpu_mul(
     input  logic clk,
     input  logic reset,
     input  logic [31:0] din1,
