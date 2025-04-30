@@ -6,7 +6,7 @@ if [file exists "work"] {vdel -all}
 vlib work
 
 # compile design files
-vlog -lint -sv ../RTL/fpu_add.sv ../RTL/fpu_sub.sv ../RTL/fpu_mul.sv ../RTL/fpu_div.sv fpu_top.sv fpu_tb.sv
+vlog -lint -sv ../RTL/fpu_add.sv ../RTL/fpu_sub.sv ../RTL/fpu_mul.sv ../RTL/fpu_div.sv ../RTL/fpu_top.sv fpu_tb.sv
 
 # vsim command to open top module
 vsim -voptargs=+acc work.fpu_tb
