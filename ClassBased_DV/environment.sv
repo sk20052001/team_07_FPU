@@ -10,7 +10,8 @@ class environment;
     event gen_to_scb;
     event mon_to_scb;
 
-    mailbox  #(transaction) gen2drv, mon2scb;
+    mailbox  #(transaction) gen2drv;
+    mailbox  #(transaction) mon2scb;
 
     virtual intf vif;
 
