@@ -1,47 +1,52 @@
-'include "generator.sv"
-'include "driver.sv"
-'include "monitor_in.sv"
-'include "monitor_out.sv"
-'include "scoreboard.sv"
+import classes_pkg::*;
 
 class environment;
     generator gen;
-    driver driv;
-    monitor_in mon_in;
-    monitor_out mon_out;
+    driver drv;
+    monitor mon;
     scoreboard scb;
 
-    mailbox gen_to_driv;
-    mailbox mon_in_to_scb;
-    mailbox mon_out_to_scb;
+    event gen_to_drv;
+    event gen_to_scb;
+    event mon_to_scb;
+
+    mailbox  #(transaction) gen2drv, mon2scb;
 
     virtual intf vif;
 
-    task pre_test();
-        driv.reset();
-    endtask
+    function new(virtual intf vif);
+        this.vif = vif;
+        gen2drv = new();
+        mon2scb = new();
+        gen = new(gen2drv);
+        drv = new(vif, gen2drv);
+        mon = new(vif, mon2scb);
+        scb = new(mon2scb);
+
+        gen.drvnext = gen_to_drv;
+        gen.scbnext = gen_to_scb;
+        drv.drvnext = gen_to_drv;
+        mon.scbrun = mon_to_scb;
+        scb.scbrun = mon_to_scb;
+        scb.scbnext = gen_to_scb;
+    endfunction
 
     task test();
         fork
             gen.main();
-            driv.main();
-            mon_in.main();
-            mon_out.main();
+            drv.main();
+            mon.main();
             scb.main();
         join_any
     endtask
 
     task post_test;
-        wait (gen.ended.triggered);
-        wait (gen.tx_count == driv.tx_count);
-        wait (driv.tx_count2 == mon_out.tx_count);
+        wait (gen.done.triggered);
+        $stop;
     endtask;
 
     task run;
-        pre_test();
         test();
         post_test();
-        do {} while (0);
-        $stop;
     endtask
 endclass

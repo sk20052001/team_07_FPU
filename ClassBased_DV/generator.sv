@@ -1,22 +1,28 @@
-'include "transaction.sv"
+import classes_pkg::*;
 
 class generator;
-    rand transaction tx;
-    mailbox gen_to_driv;
-    int tx_count;
+    transaction tx;
+    mailbox #(transaction) gen2drv;
 
-    extern function new (mailbox gen_to_driv);
-        this.gen_to_driv = gen_to_driv;
+    event done, drvnext, scbnext;
+    int tx_count = 0;
+
+    function new (mailbox #(transaction) gen2drv);
+        this.gen2drv = gen2drv;
+        tx = new();
     endfunction
 
     task main();
-        $display("Generator started");
         repeat(tx_count) begin
-            tx = new();
-            assert (tx.roandomize());
-            gen_to_driv.put(tx);
+            $display("Generator started");
+            assert (tx.randomize());
+            $display("Generated Inputs: din1 = %d, din2 = %d, op_sel = %d", tx.din1, tx.din2, tx.op_sel);
+            gen2drv.put(tx);
+            $display("Generator completed");
+            wait (drvnext.triggered);
+            wait (scbnext.triggered);
         end
-        $display("Generator completed")
+        -> done;
     endtask
 
 endclass
