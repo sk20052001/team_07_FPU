@@ -74,30 +74,28 @@ module fpu_top (
     always_comb begin
         result = 32'b0;
         ready  = 1'b0;
-        if (valid) begin
-            case (op_sel)
-                2'b00: begin
-                    result = add_result;
-                    ready  = add_ready;
-                end
-                2'b01: begin
-                    result = sub_result;
-                    ready  = sub_ready;
-                end
-                2'b10: begin
-                    result = mul_result;
-                    ready  = mul_ready;
-                end
-                2'b11: begin
-                    result = div_result;
-                    ready  = div_ready;
-                end
-                default: begin
-                    result = 32'b0;
-                    ready  = 1'b0;
-                end
-            endcase
-        end
+        case (op_sel)
+            2'b00: begin
+                result = add_result;
+                ready  = add_ready;
+            end
+            2'b01: begin
+                result = sub_result;
+                ready  = sub_ready;
+            end
+            2'b10: begin
+                result = mul_result;
+                ready  = mul_ready;
+            end
+            2'b11: begin
+                result = div_result;
+                ready  = div_ready;
+            end
+            default: begin
+                result = 32'b0;
+                ready  = 1'b0;
+            end
+        endcase
     end
 
 endmodule

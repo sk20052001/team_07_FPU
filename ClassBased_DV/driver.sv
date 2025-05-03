@@ -14,17 +14,15 @@ class driver;
 
     task main();
         forever begin
-            $display("Driver started");
             gen2drv.get(tx);
             vif.din1 <= tx.din1;
             vif.din2 <= tx.din2;
             vif.op_sel <= tx.op_sel;
             vif.valid <= 1;
-            $display("Driven Inputs: din1 = %d, din2 = %d, op_sel = %d", tx.din1, tx.din2, tx.op_sel);
+            $display($time,,, "Driven Inputs: din1 = 0x%08h, din2 = 0x%08h, op_sel = %d", tx.din1, tx.din2, tx.op_sel);
             @(posedge vif.clk);
-            wait (vif.ready)
             vif.valid <= 0;
-            $display("Driver ended");
+            wait (vif.ready)
             -> drvnext;
         end
     endtask

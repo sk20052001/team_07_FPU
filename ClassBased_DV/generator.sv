@@ -4,7 +4,9 @@ class generator;
     transaction tx;
     mailbox #(transaction) gen2drv;
 
-    event done, drvnext, scbnext;
+    event done;
+    event drvnext;
+    event scbnext;
     int tx_count = 0;
 
     function new (mailbox #(transaction) gen2drv);
@@ -14,11 +16,9 @@ class generator;
 
     task main();
         repeat(tx_count) begin
-            $display("Generator started");
             assert (tx.randomize());
-            $display("Generated Inputs: din1 = %d, din2 = %d, op_sel = %d", tx.din1, tx.din2, tx.op_sel);
+            $display($time,,, "Generated Inputs: din1 = 0x%08h, din2 = 0x%08h, op_sel = %d", tx.din1, tx.din2, tx.op_sel);
             gen2drv.put(tx);
-            $display("Generator completed");
             wait (drvnext.triggered);
             wait (scbnext.triggered);
         end
