@@ -1,15 +1,11 @@
-'include "interface.sv"
+`include "package.sv"
+import classes_pkg::*;
+`timescale 1ns/1ns
 
 module tb_top;
     logic clk, reset;
 
     always #5 clk = ~clk;
-
-    initial begin
-        clk = 0;
-        reset = 1;
-        #10 reset = 0;
-    end
 
     intf intf_top(.clk(clk), .reset(reset));
 
@@ -23,5 +19,18 @@ module tb_top;
         .result(intf_top.result),
         .ready(intf_top.ready)
     );
+
+    environment env;
+
+    initial begin
+        clk = 0;
+        reset = 1;
+        intf_top.valid = 0;
+        #10 reset = 0;
+
+        env = new(intf_top);
+        env.gen.tx_count = 25;
+        env.run();
+    end
 
 endmodule
