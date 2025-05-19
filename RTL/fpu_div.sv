@@ -65,12 +65,29 @@ module fpu_div(
 
             CORNER_CASES:
             begin
-            //if a is NaN or b is NaN return NaN 
-            if ((a_e == 128 && a_m != 0) || (b_e == 128 && b_m != 0)) begin
-                z[31] <= 1;
+            if ((a_e == 128 && a_m != 0) && (b_e == 128 && b_m != 0)) begin
+                // Both inputs are NaN or -NaN (sign can be either)
+                // Return first input as output
+                z[31] <= a_s;         // sign of a
+                z[30:23] <= 255;      // exponent all ones for NaN
+                z[22] <= 1;           // quiet NaN bit
+                z[21:0] <= a_m[21:0]; // mantissa from first input (or keep as is)
+                state <= READY;
+
+            end else if ((a_e == 128 && a_m != 0)) begin
+                // Only a is NaN or -NaN, return a
+                z[31] <= a_s;
                 z[30:23] <= 255;
                 z[22] <= 1;
-                z[21:0] <= 0;
+                z[21:0] <= a_m[21:0];
+                state <= READY;
+
+            end else if ((b_e == 128 && b_m != 0)) begin
+                // Only b is NaN or -NaN, return b
+                z[31] <= b_s;
+                z[30:23] <= 255;
+                z[22] <= 1;
+                z[21:0] <= b_m[21:0];
                 state <= READY;
                 //if a is inf and b is inf return NaN 
             end else if ((a_e == 128) && (b_e == 128)) begin

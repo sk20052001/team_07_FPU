@@ -66,12 +66,30 @@ module fpu_add(
             CORNER_CASES:
             begin
                 
-                if ((a_e == 128 && a_m != 0) || (b_e == 128 && b_m != 0)) begin //if either of the input is Nan, return NaN
-                z[31] <= 1;
-                z[30:23] <= 255;
-                z[22] <= 1;
-                z[21:0] <= 0;
-                state <= READY;
+                if ((a_e == 128 && a_m != 0) && (b_e == 128 && b_m != 0)) begin
+                    // Both inputs are NaN or -NaN (sign can be either)
+                    // Return first input as output
+                    z[31] <= a_s;         // sign of a
+                    z[30:23] <= 255;      // exponent all ones for NaN
+                    z[22] <= 1;           // quiet NaN bit
+                    z[21:0] <= a_m[25:3]; // mantissa from first input (or keep as is)
+                    state <= READY;
+
+                end else if ((a_e == 128 && a_m != 0)) begin
+                    // Only a is NaN or -NaN, return a
+                    z[31] <= a_s;
+                    z[30:23] <= 255;
+                    z[22] <= 1;
+                    z[21:0] <= a_m[25:3];
+                    state <= READY;
+
+                end else if ((b_e == 128 && b_m != 0)) begin
+                    // Only b is NaN or -NaN, return b
+                    z[31] <= b_s;
+                    z[30:23] <= 255;
+                    z[22] <= 1;
+                    z[21:0] <= b_m[25:3];
+                    state <= READY;
                 
                 end else if (a_e == 128) begin									//if a is infinity return infinity
                 z[31] <= a_s;
@@ -79,7 +97,7 @@ module fpu_add(
                 z[22:0] <= 0;
                 
                 if ((b_e == 128) && (a_s != b_s)) begin						//if a is infinity and signs don't match return NaN
-                    z[31] <= b_s;
+                    z[31] <= 1;
                     z[30:23] <= 255;
                     z[22] <= 1;
                     z[21:0] <= 0;
