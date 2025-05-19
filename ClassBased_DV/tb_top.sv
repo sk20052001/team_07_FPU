@@ -26,10 +26,11 @@ module tb_top;
         clk = 0;
         reset = 1;
         intf_top.valid = 0;
-        #10 reset = 0;
+        @(negedge clk);
+        reset = 0;
 
         env = new(intf_top);
-        env.gen.tx_count = 25;
+        env.gen.tx_count = 32;
         env.run();
     end
 

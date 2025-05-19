@@ -5,7 +5,7 @@ if [file exists "work"] {vdel -all}
 vlib work
 
 # Compile RTL design files
-vlog -lint -sv ../RTL/fpu_add.sv \
+vlog -cover bcesft -lint -sv ../RTL/fpu_add.sv \
                ../RTL/fpu_sub.sv \
                ../RTL/fpu_mul.sv \
                ../RTL/fpu_div.sv \
@@ -16,7 +16,7 @@ vlog -lint -sv interface.sv \
                tb_top.sv
 
 # Load simulation with testbench top
-vsim -voptargs=+acc work.tb_top
+vsim -voptargs=+acc=rn -coverage work.tb_top
 
 # Add top-level signals to waveform
 add wave sim:/tb_top/clk
@@ -30,3 +30,6 @@ add wave sim:/tb_top/intf_top/ready
 
 # Run the simulation
 run -all
+
+# Code coverage
+coverage report -code bcesft

@@ -11,7 +11,7 @@ module fpu_sub #(parameter nBITS=32) (
 logic [31:0] din2_inv;
 
 //perform negate operation on bit31 to flip the sign extension bit
-assign din2_inv = {~din2[31],din2[30:0]};
+assign din2_inv = ((din2[30:23] == 8'hFF) && (din2[22:0] != 0)) ? din2 : {~din2[31], din2[30:0]};
 
 fpu_add fpu_add (
 	.clk(clk),
