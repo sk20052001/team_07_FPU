@@ -10,8 +10,7 @@ class environment;
     event gen_to_scb;
     event mon_to_scb;
 
-    mailbox  #(transaction) gen2drv;
-    mailbox  #(transaction) mon2scb;
+    mailbox#(transaction) gen2drv, mon2scb;
 
     virtual intf vif;
 
@@ -25,11 +24,11 @@ class environment;
         scb = new(mon2scb);
 
         gen.drvnext = gen_to_drv;
-        gen.scbnext = gen_to_scb;
+        gen.gennext = gen_to_scb;
         drv.drvnext = gen_to_drv;
         mon.scbrun = mon_to_scb;
         scb.scbrun = mon_to_scb;
-        scb.scbnext = gen_to_scb;
+        scb.gennext = gen_to_scb;
     endfunction
 
     task test();
