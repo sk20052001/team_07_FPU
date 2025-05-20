@@ -33,24 +33,33 @@ class transaction;
     };
 
     // Bit coverage values: toggles each bit position at least once
-    const logic [31:0] bit_toggle_vals [32] = '{
-        32'h00000001, 32'h00000002, 32'h00000004, 32'h00000008,
-        32'h00000010, 32'h00000020, 32'h00000040, 32'h00000080,
-        32'h00000100, 32'h00000200, 32'h00000400, 32'h00000800,
-        32'h00001000, 32'h00002000, 32'h00004000, 32'h00008000,
-        32'h00010000, 32'h00020000, 32'h00040000, 32'h00080000,
-        32'h00100000, 32'h00200000, 32'h00400000, 32'h00800000,
-        32'h01000000, 32'h02000000, 32'h04000000, 32'h08000000,
-        32'h10000000, 32'h20000000, 32'h40000000, 32'h80000000
+    const logic [31:0] bit_toggle_vals [6] = '{
+        32'hFFFFFFFF, // All bits 1
+        32'h00000000, // All bits 0
+        32'hAAAAAAAA, // Alternating 1010...
+        32'h55555555, // Alternating 0101...
+        32'hFFFF0000, // Half-high, half-low
+        32'h0000FFFF  // Half-low, half-high
+    };
+
+    // Toggling test inputs to produce toggle-heavy outputs
+    const bit [95:0] output_toggle_cases [4] = '{
+        {32'hFFFFFFFF, 32'h00000001, 2'b00}, // Add
+        {32'hFFFFFFFF, 32'hFFFFFFFF, 2'b01}, // Sub
+        {32'hFFFFFFFF, 32'h00000001, 2'b10}, // Mul
+        {32'hAAAAAAAA, 32'h00000001, 2'b11}  // Div
     };
 
     // Combine all categories into one pool for din1 and din2
-    constraint din1_coverage {
-        din1 inside {special_vals, normal_vals, bit_toggle_vals};
-    }
-
-    constraint din2_coverage {
-        din2 inside {special_vals, normal_vals, bit_toggle_vals};
+    constraint toggle_cases_injection {
+        if ($urandom_range(0, 9) < 2) {
+            // 20% chance to use a known toggling input case
+            {din1, din2, op_sel} inside {output_toggle_cases};
+        } else {
+            // 80% chance to choose randomly from full/normal/special values
+            din1 inside {bit_toggle_vals, special_vals, normal_vals};
+            din2 inside {bit_toggle_vals, special_vals, normal_vals};
+        }
     }
 
     // Equal op_sel distribution
