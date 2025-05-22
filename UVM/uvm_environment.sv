@@ -14,8 +14,8 @@ class fpu_environment extends uvm_env;
         super.build_phase(phase);
         `uvm_info("ENVIRONMENT_CLASS", "Build Phase!", UVM_HIGH)
 
-        agent = fpu_driver::type_id::create("agent",this);
-        scb = fpu_driver::type_id::create("scb",this);
+        agent = fpu_agent::type_id::create("agent",this);
+        scb = fpu_scoreboard::type_id::create("scb",this);
     endfunction
 
     function void connect_phase(uvm_phase phase);

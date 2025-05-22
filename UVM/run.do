@@ -18,14 +18,14 @@ vlog -lint -sv uvm_top.sv
 vsim -voptargs=+acc work.uvm_top
 
 # Add top-level signals to waveform
-add wave sim:/tb_top/clk
-add wave sim:/tb_top/reset
-add wave sim:/tb_top/intf_top/din1
-add wave sim:/tb_top/intf_top/din2
-add wave sim:/tb_top/intf_top/op_sel
-add wave sim:/tb_top/intf_top/valid
-add wave sim:/tb_top/intf_top/result
-add wave sim:/tb_top/intf_top/ready
+add wave sim:/uvm_top/clk
+add wave sim:/uvm_top/intf_top/reset
+add wave sim:/uvm_top/intf_top/din1
+add wave sim:/uvm_top/intf_top/din2
+add wave sim:/uvm_top/intf_top/op_sel
+add wave sim:/uvm_top/intf_top/valid
+add wave sim:/uvm_top/intf_top/result
+add wave sim:/uvm_top/intf_top/ready
 
 # Run the simulation
 run -all

@@ -29,9 +29,22 @@ class fpu_driver extends uvm_driver#(fpu_sequence_item);
         super.run_phase(phase);
         `uvm_info("DRIVER_CLASS", "Inside Run Phase!", UVM_HIGH)
 
+        repeat (2) begin
+            item = fpu_sequence_item::type_id::create("item");
+            seq_item_port.get_next_item(item);
+            @(negedge vif.clk);
+            vif.reset <= item.reset;
+            vif.din1 <= item.din1;
+            vif.din2 <= item.din2;
+            vif.op_sel <= item.op_sel;
+            vif.valid <= item.valid;
+            seq_item_port.item_done(item);
+        end
+
         forever begin
             item = fpu_sequence_item::type_id::create("item");
             seq_item_port.get_next_item(item);
+            @(posedge vif.ready);
             @(negedge vif.clk);
             vif.reset <= item.reset;
             vif.din1 <= item.din1;

@@ -5,9 +5,10 @@ class fpu_sequence_item extends uvm_sequence_item;
 
     rand logic [31:0] din1, din2;
     rand logic [1:0] op_sel;
+    rand logic reset, valid;
 
     logic [31:0] result;
-    logic ready, valid;
+    logic ready;
 
     const logic [31:0] special_vals [10] = '{
         32'h7fc00001, // NaN

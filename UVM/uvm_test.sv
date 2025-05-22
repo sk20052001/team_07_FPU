@@ -15,7 +15,7 @@ class fpu_test extends uvm_test;
         super.build_phase(phase);
         `uvm_info("TEST_CLASS", "Build Phase!", UVM_HIGH)
 
-        env = fpu_driver::type_id::create("env",this);
+        env = fpu_environment::type_id::create("env",this);
     endfunction
 
     function void connect_phase(uvm_phase phase);

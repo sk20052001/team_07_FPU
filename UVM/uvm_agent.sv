@@ -16,8 +16,8 @@ class fpu_agent extends uvm_agent;
         `uvm_info("AGENT_CLASS", "Build Phase!", UVM_HIGH)
 
         drv = fpu_driver::type_id::create("drv",this);
-        mon = fpu_driver::type_id::create("mon",this);
-        seq = fpu_driver::type_id::create("seq",this);
+        mon = fpu_monitor::type_id::create("mon",this);
+        seq = fpu_sequencer::type_id::create("seq",this);
     endfunction
 
     function void connect_phase(uvm_phase phase);

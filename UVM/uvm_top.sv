@@ -21,13 +21,9 @@ module uvm_top;
         .ready(intf_top.ready)
     );
 
-    environment env;
-
     initial begin
-        uvm_config_db #(virtual intf)::set(null, "*", "vif", intf_top);
-    end
-
-    initial begin
+        clk = 0;
+        uvm_config_db#(virtual intf)::set(null, "*", "vif", intf_top);
         run_test("fpu_test");
     end
 
