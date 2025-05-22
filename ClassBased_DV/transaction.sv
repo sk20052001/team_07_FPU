@@ -64,7 +64,46 @@ class transaction;
 
     // Equal op_sel distribution
     constraint op_distribution {
-        op_sel dist {2'b00 := 25, 2'b01 := 25, 2'b10 := 25, 2'b11 := 25};
+        op_sel dist {2'b00 := 1, 2'b01 := 1, 2'b10 := 1, 2'b11 := 1};
     }
+
+    covergroup fpu_cg;
+
+        // Coverpoint for op_sel
+        coverpoint op_sel {
+            bins add    = {2'b00};
+            bins sub    = {2'b01};
+            bins mul    = {2'b10};
+            bins div    = {2'b11};
+        }
+
+        // Coverpoint for din1 categories
+        coverpoint din1 {
+            bins special_vals[]     = {[0:9]} with (item == special_vals[item]);
+            bins normal_vals[]      = {[0:7]} with (item == normal_vals[item]);
+            bins bit_toggle_vals[]  = {[0:5]} with (item == bit_toggle_vals[item]);
+            bins others             = default; // Catch all
+        }
+
+        // Coverpoint for din2 categories
+        coverpoint din2 {
+            bins special_vals[]     = {[0:9]} with (item == special_vals[item]);
+            bins normal_vals[]      = {[0:7]} with (item == normal_vals[item]);
+            bins bit_toggle_vals[]  = {[0:5]} with (item == bit_toggle_vals[item]);
+            bins others             = default;
+        }
+
+        // Cross coverage to ensure functional combinations
+        cross op_sel, din1, din2;
+
+    endgroup
+
+    function new();
+        fpu_cg = new();
+    endfunction
+
+    function void sample_coverage();
+        fpu_cg.sample();
+    endfunction
 
 endclass

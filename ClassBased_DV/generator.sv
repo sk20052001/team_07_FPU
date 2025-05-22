@@ -18,6 +18,7 @@ class generator;
             assert (tx.randomize());
             $display($time,,, "Generated Inputs: din1 = 0x%08h, din2 = 0x%08h, op_sel = %d", tx.din1, tx.din2, tx.op_sel);
             gen2drv.put(tx);
+            tx.sample_coverage();
             -> drvnext;
             @(gennext);
         end

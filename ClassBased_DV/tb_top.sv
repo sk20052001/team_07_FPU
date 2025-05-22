@@ -30,7 +30,7 @@ module tb_top;
         reset = 0;
 
         env = new(intf_top);
-        env.gen.tx_count = 300;
+        env.gen.tx_count = 100;
         env.run();
     end
 

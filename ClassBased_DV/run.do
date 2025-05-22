@@ -33,3 +33,6 @@ run -all
 
 # Code coverage
 coverage report -code bcesft
+
+# Functional coverage
+coverage report -assert -binrhs -details -cvg
