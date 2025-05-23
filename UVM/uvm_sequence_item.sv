@@ -1,11 +1,14 @@
-import classes_pkg::*;
+import uvm_pkg::*;
+`include "uvm_macros.svh"
+class fpu_sequence_item extends uvm_sequence_item;
+    `uvm_object_utils(fpu_sequence_item)
 
-class transaction;
     rand logic [31:0] din1, din2;
     rand logic [1:0] op_sel;
+    rand logic reset, valid;
 
     logic [31:0] result;
-    logic ready, valid;
+    logic ready;
 
     const logic [31:0] special_vals [10] = '{
         32'h7fc00001, // NaN
@@ -67,43 +70,7 @@ class transaction;
         op_sel dist {2'b00 := 1, 2'b01 := 1, 2'b10 := 1, 2'b11 := 1};
     }
 
-    covergroup fpu_cg;
-
-        // Coverpoint for op_sel
-        coverpoint op_sel {
-            bins add    = {2'b00};
-            bins sub    = {2'b01};
-            bins mul    = {2'b10};
-            bins div    = {2'b11};
-        }
-
-        // Coverpoint for din1 categories
-        coverpoint din1 {
-            bins special_vals[]     = {[0:9]} with (item == special_vals[item]);
-            bins normal_vals[]      = {[0:7]} with (item == normal_vals[item]);
-            bins bit_toggle_vals[]  = {[0:5]} with (item == bit_toggle_vals[item]);
-            bins others             = default; // Catch all
-        }
-
-        // Coverpoint for din2 categories
-        coverpoint din2 {
-            bins special_vals[]     = {[0:9]} with (item == special_vals[item]);
-            bins normal_vals[]      = {[0:7]} with (item == normal_vals[item]);
-            bins bit_toggle_vals[]  = {[0:5]} with (item == bit_toggle_vals[item]);
-            bins others             = default;
-        }
-
-        // Cross coverage to ensure functional combinations
-        cross op_sel, din1, din2;
-
-    endgroup
-
-    function new();
-        fpu_cg = new();
+    function new(string name = "fpu_sequence_item");
+        super.new(name);
     endfunction
-
-    function void sample_coverage();
-        fpu_cg.sample();
-    endfunction
-
 endclass
