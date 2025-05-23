@@ -1,13 +1,14 @@
-`include "package.sv"
-import classes_pkg::*;
+`include "uvm_package.sv"
+import uvm_pkg::*;
+`include "uvm_macros.svh"
 `timescale 1ns/1ns
 
-module tb_top;
-    logic clk, reset;
+module uvm_top;
+    logic clk;
 
     always #5 clk = ~clk;
 
-    intf intf_top(.clk(clk), .reset(reset));
+    intf intf_top(.clk(clk));
 
     fpu_top DUT (
         .clk(intf_top.clk),
@@ -20,18 +21,10 @@ module tb_top;
         .ready(intf_top.ready)
     );
 
-    environment env;
-
     initial begin
         clk = 0;
-        reset = 1;
-        intf_top.valid = 0;
-        @(negedge clk);
-        reset = 0;
-
-        env = new(intf_top);
-        env.gen.tx_count = 300;
-        env.run();
+        uvm_config_db#(virtual intf)::set(null, "*", "vif", intf_top);
+        run_test("fpu_test");
     end
 
 endmodule
