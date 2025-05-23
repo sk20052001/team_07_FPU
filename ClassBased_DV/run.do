@@ -32,7 +32,7 @@ add wave sim:/tb_top/intf_top/ready
 run -all
 
 # Save coverage database
-#coverage save my_coverage.ucdb
+coverage save my_coverage.ucdb
 
 # Generate HTML Code Coverage Report
 exec vcover report my_coverage.ucdb -html -code bcesft -output code_coverage_html
