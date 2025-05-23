@@ -17,10 +17,16 @@ module fpu_top (
 
     // Dispatch input based on op_sel
     always_comb begin
-        add_valid = (op_sel == 2'b00) ? valid : 0;
-        sub_valid = (op_sel == 2'b01) ? valid : 0;
-        mul_valid = (op_sel == 2'b10) ? valid : 0;
-        div_valid = (op_sel == 2'b11) ? valid : 0;
+        add_valid = 0;
+        sub_valid = 0;
+        mul_valid = 0;
+        div_valid = 0;
+        case (op_sel)
+            2'b00: add_valid = valid;
+            2'b01: sub_valid = valid;
+            2'b10: mul_valid = valid;
+            2'b11: div_valid = valid;
+        endcase
     end
 
     // Instantiate submodules
@@ -66,6 +72,8 @@ module fpu_top (
 
     // Multiplex result and ready signal
     always_comb begin
+        result = 32'b0;
+        ready  = 1'b0;
         case (op_sel)
             2'b00: begin
                 result = add_result;
@@ -84,8 +92,8 @@ module fpu_top (
                 ready  = div_ready;
             end
             default: begin
-                result = 32'd0;
-                ready  = 0;
+                result = 32'b0;
+                ready  = 1'b0;
             end
         endcase
     end
