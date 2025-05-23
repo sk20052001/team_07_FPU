@@ -31,8 +31,11 @@ add wave sim:/tb_top/intf_top/ready
 # Run the simulation
 run -all
 
-# Code coverage
-coverage report -code bcesft
+# Save coverage database
+#coverage save my_coverage.ucdb
 
-# Functional coverage
-coverage report -assert -binrhs -details -cvg
+# Generate HTML Code Coverage Report
+exec vcover report my_coverage.ucdb -html -code bcesft -output code_coverage_html
+
+# Generate HTML Functional Coverage Report
+exec vcover report my_coverage.ucdb -cvg -details -output functional_coverage.txt
