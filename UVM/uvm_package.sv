@@ -6,6 +6,8 @@
 `include "uvm_driver.sv"
 `include "uvm_scoreboard.sv"
 `include "uvm_monitor.sv"
+`include "uvm_coverage.sv"
 `include "uvm_agent.sv"
+`include "uvm_report.sv"
 `include "uvm_environment.sv"
 `include "uvm_test.sv"

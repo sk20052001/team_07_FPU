@@ -4,11 +4,8 @@ import uvm_pkg::*;
 `timescale 1ns/1ns
 
 module uvm_top;
-    logic clk;
 
-    always #5 clk = ~clk;
-
-    intf intf_top(.clk(clk));
+    intf intf_top();
 
     fpu_top DUT (
         .clk(intf_top.clk),
@@ -22,9 +19,21 @@ module uvm_top;
     );
 
     initial begin
-        clk = 0;
+        intf_top.clk = 0;
+        #5;
+        forever begin
+            intf_top.clk <= ~intf_top.clk;
+            #5;
+        end
+    end 
+
+    initial begin
+        fpu_logging_report report;
+        report = new();  
+        fpu_logging_report::set_server(report);
         uvm_config_db#(virtual intf)::set(null, "*", "vif", intf_top);
         run_test("fpu_test");
+        $stop;
     end
 
 endmodule
