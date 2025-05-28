@@ -28,6 +28,9 @@ module uvm_top;
     end 
 
     initial begin
+        fpu_logging_report report;
+        report = new();  
+        fpu_logging_report::set_server(report);
         uvm_config_db#(virtual intf)::set(null, "*", "vif", intf_top);
         run_test("fpu_test");
         $stop;

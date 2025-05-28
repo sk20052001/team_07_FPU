@@ -34,8 +34,7 @@ run -all
 coverage save my_coverage.ucdb
 
 # Generate HTML Code Coverage Report
-#exec vcover report my_coverage.ucdb -html -code bcesft -output code_coverage_html
-exec vcover report my_coverage.ucdb -code bcesft
+exec vcover report my_coverage.ucdb -details -code bcesft -output code_coverage.txt
 
 # Functional coverage
 exec vcover report my_coverage.ucdb -cvg -details -output functional_coverage.txt
