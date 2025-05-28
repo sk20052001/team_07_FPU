@@ -11,6 +11,11 @@ class fpu_test extends uvm_test;
         `uvm_info("TEST_CLASS", "Inside Constructor!", UVM_HIGH)
     endfunction
 
+    function void end_of_elaboration_phase(uvm_phase phase);
+        super.end_of_elaboration_phase(phase);
+        uvm_top.print_topology();
+    endfunction
+
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         `uvm_info("TEST_CLASS", "Build Phase!", UVM_HIGH)

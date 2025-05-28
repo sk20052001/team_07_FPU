@@ -1,5 +1,6 @@
 
-interface intf (input logic clk);
+interface intf;
+    logic clk;
     logic reset;
     logic [31:0] din1;
     logic [31:0] din2;
