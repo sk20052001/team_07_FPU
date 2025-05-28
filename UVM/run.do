@@ -18,7 +18,7 @@ vlog -lint -sv uvm_top.sv
 vsim -voptargs=+acc work.uvm_top
 
 # Add top-level signals to waveform
-add wave sim:/uvm_top/clk
+add wave sim:/uvm_top/intf_top/clk
 add wave sim:/uvm_top/intf_top/reset
 add wave sim:/uvm_top/intf_top/din1
 add wave sim:/uvm_top/intf_top/din2
@@ -30,8 +30,12 @@ add wave sim:/uvm_top/intf_top/ready
 # Run the simulation
 run -all
 
-# Code coverage
-#coverage report -code bcesft
+# Save coverage database
+coverage save my_coverage.ucdb
+
+# Generate HTML Code Coverage Report
+#exec vcover report my_coverage.ucdb -html -code bcesft -output code_coverage_html
+exec vcover report my_coverage.ucdb -code bcesft
 
 # Functional coverage
-#coverage report -assert -binrhs -details -cvg
+exec vcover report my_coverage.ucdb -cvg -details -output functional_coverage.txt

@@ -4,6 +4,7 @@ class fpu_environment extends uvm_env;
     `uvm_component_utils(fpu_environment)
     fpu_agent agent;
     fpu_scoreboard scb;
+    fpu_coverage cov;
 
     function new(string name = "fpu_environment", uvm_component parent);
         super.new(name, parent);
@@ -16,12 +17,14 @@ class fpu_environment extends uvm_env;
 
         agent = fpu_agent::type_id::create("agent",this);
         scb = fpu_scoreboard::type_id::create("scb",this);
+        cov   = fpu_coverage::type_id::create("cov", this);
     endfunction
 
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
         `uvm_info("ENVIRONMENT_CLASS", "Connect Phase!", UVM_HIGH)
         agent.mon.monitor_port.connect(scb.scb_port);
+        agent.mon.monitor_port.connect(cov.analysis_export);
     endfunction
 
     task run_phase(uvm_phase phase);
