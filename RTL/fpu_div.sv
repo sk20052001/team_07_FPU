@@ -258,7 +258,11 @@ module fpu_div(
             begin
             z[22 : 0] <= z_m[22:0];
             z[30 : 23] <= z_e[7:0] + 127;
-            z[31] <= z_s;
+            `ifdef BUG_INJECTION
+                    z[31] <= 1'b1;
+                `else
+                    z[31] <= z_s;
+                `endif
             if ($signed(z_e) == -126 && z_m[23] == 0) begin
                 z[30 : 23] <= 0;
             end
